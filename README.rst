@@ -71,9 +71,7 @@ Style guide
 We follow `PEP8 standards <https://www.python.org/dev/peps/pep-0008>`__
 with the following exceptions: 
 
-- Use *tabs instead of spaces* - this allows all individuals to have 
-visual depth of indentation they prefer, without changing the source 
-code at all, and it is simply smaller
+- Use *tabs instead of spaces* - this allows all individuals to have visual depth of indentation they prefer, without changing the source code at all, and it is simply smaller
 
 Branching / Release
 -------------------

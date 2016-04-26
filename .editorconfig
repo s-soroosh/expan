@@ -1,9 +1,9 @@
 # http://editorconfig.org
-#TODO: maybe check if this is ok with everyone...
+#TODO: check if this is ok with everyone...
 root = true
 
 [*]
-indent_style = space
+indent_style = tab
 indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true

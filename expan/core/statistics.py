@@ -9,8 +9,9 @@ def _delta_mean(x, y):
 	"Implemented as function to allow calling from bootstrap."
 	return np.nanmean(x) - np.nanmean(y)
 
+
 def delta(x, y, assume_normal=True, percentiles=[2.5, 97.5],
-			min_observations=20, nruns=10000, relative=False):
+		  min_observations=20, nruns=10000, relative=False):
 	"""
 	Calculates the difference of means between the samples (x-y) in a
 	statistical sense, i.e. with confidence intervals.
@@ -76,13 +77,14 @@ def delta(x, y, assume_normal=True, percentiles=[2.5, 97.5],
 		# Computing the confidence intervals
 		if assume_normal:
 			c_i = normal_sample_difference(x=_x, y=_y, percentiles=percentiles,
-					relative=relative)
+										   relative=relative)
 		else:
 			c_i, _ = bootstrap(x=_x, y=_y, percentiles=percentiles, nruns=nruns,
-						relative=relative)
+							   relative=relative)
 
 	# Return the result structure
 	return mu, c_i, ss_x, ss_y, np.nanmean(_x), np.nanmean(_y)
+
 
 def sample_size(x):
 	"""
@@ -115,6 +117,7 @@ def sample_size(x):
 
 	return len(x) - x_nan
 
+
 def chi_square(x, y, min_counts=5):
 	"""
 	Performs the chi-square homogeneity test on categorical arrays x and y
@@ -146,13 +149,13 @@ def chi_square(x, y, min_counts=5):
 	#
 	treat_counts = _x.value_counts()
 	control_counts = _y.value_counts()
-	#Get observed counts for both _x and _y for each category
+	# Get observed counts for both _x and _y for each category
 	# (=contingency table) and set the counts for non occuring categories to 0
 	observed_ct = pd.DataFrame([treat_counts, control_counts]).fillna(0)
 	# Ensure at least a frequency of 5 at every location in observed_ct,
 	# otherwise drop categorie see
 	# http://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.stats.chisquare.html
-	observed_freqs = observed_ct[observed_ct>=min_counts].dropna(axis=1)
+	observed_freqs = observed_ct[observed_ct >= min_counts].dropna(axis=1)
 
 	# Calculate expected counts for chi-square homogeneity test
 	# expected_freqs = group_totals*category_totals/all_totals
@@ -161,23 +164,24 @@ def chi_square(x, y, min_counts=5):
 	all_totals = observed_freqs.sum().sum()
 	category_totals = observed_freqs.sum(axis=0)
 	expected_freqs = np.outer(category_totals,
-	                          observed_freqs.sum(axis=1)/all_totals).T
+							  observed_freqs.sum(axis=1) / all_totals).T
 
-    # The actual degrees of freedom for the test are dof=(num_categories-1)
+	# The actual degrees of freedom for the test are dof=(num_categories-1)
 	# however the chisquare() function assumes dof=k-1, with
 	# k = num_variants*num_categories
 	# see http://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.stats.chisquare.html
 	# Therefore, we have to correct using
 	# ddof=(2*num_categories-1) - num_categories-1
 	# Calculate the chi-square statistic and p-value
-	es=expected_freqs.shape
-	delta_dof = (es[0]*es[1]-1) - (es[0]-1)*(es[1]-1)
+	es = expected_freqs.shape
+	delta_dof = (es[0] * es[1] - 1) - (es[0] - 1) * (es[1] - 1)
 	chisqr, p_val = stats.chisquare(f_obs=observed_freqs,
-	                                f_exp=expected_freqs,
-	                                ddof=delta_dof,
-	                                axis=None)
+									f_exp=expected_freqs,
+									ddof=delta_dof,
+									axis=None)
 	# Return the p-value
 	return p_val, chisqr, es[1]
+
 
 def alpha_to_percentiles(alpha):
 	"""
@@ -192,8 +196,9 @@ def alpha_to_percentiles(alpha):
 	# Compute the percentiles
 	return [100. * alpha / 2, 100. * (1 - (alpha / 2))]
 
+
 def bootstrap(x, y, func=_delta_mean, nruns=10000, percentiles=[2.5, 97.5],
-				min_observations=20, return_bootstraps=False, relative=False):
+			  min_observations=20, return_bootstraps=False, relative=False):
 	"""
 	Bootstraps the Confidence Intervals for a particular function comparing
 	two samples. NaNs are ignored (discarded before calculation).
@@ -231,12 +236,11 @@ def bootstrap(x, y, func=_delta_mean, nruns=10000, percentiles=[2.5, 97.5],
 	ss_x = _x.size - np.isnan(_x).sum()
 	ss_y = _y.size - np.isnan(_y).sum()
 
-
 	# Checking if enough observations are left after dropping NaNs
 	if min(ss_x, ss_y) < min_observations:
 		# Create nan percentile dictionary
 		c_val = dict(zip(percentiles, np.empty(len(percentiles)) * np.nan))
-		return (c_val,None)
+		return (c_val, None)
 	else:
 		# Initializing bootstraps array and random sampling for each run
 		bootstraps = np.ones(nruns) * np.nan
@@ -273,8 +277,8 @@ def pooled_std(std1, n1, std2, n2):
 		http://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/BS704_Confidence_Intervals/BS704_Confidence_Intervals5.html
 	"""
 	if not (0.5 < (std1 ** 2) / (std2 ** 2) < 2.):
-			warnings.warn('Sample variances differ too much to assume that '
-					'population variances are equal.')
+		warnings.warn('Sample variances differ too much to assume that '
+					  'population variances are equal.')
 
 	return np.sqrt(((n1 - 1) * std1 ** 2 + (n2 - 1) * std2 ** 2) / (n1 + n2 - 2))
 
@@ -309,10 +313,10 @@ def normal_percentiles(mean, std, n, percentiles=[2.5, 97.5], relative=False):
 	# Mapping percentiles via standard error
 	if relative:
 		return dict([(p, stats.t.ppf(p / 100.0, df=n - 1) * st_error)
-						for p in percentiles])
+					 for p in percentiles])
 	else:
 		return dict([(p, mean + stats.t.ppf(p / 100.0, df=n - 1) * st_error)
-						for p in percentiles])
+					 for p in percentiles])
 
 
 def normal_sample_percentiles(values, percentiles=[2.5, 97.5], relative=False):
@@ -350,7 +354,7 @@ def normal_sample_percentiles(values, percentiles=[2.5, 97.5], relative=False):
 
 	# Actual computation is done in normal_percentiles
 	return normal_percentiles(mean=mean, std=std, n=n, percentiles=percentiles,
-								relative=relative)
+							  relative=relative)
 
 
 def normal_sample_difference(x, y, percentiles=[2.5, 97.5], relative=False):
@@ -390,11 +394,11 @@ def normal_sample_difference(x, y, percentiles=[2.5, 97.5], relative=False):
 
 	# Push calculation to normal difference function
 	return normal_difference(mean1=mean1, std1=std1, n1=n1, mean2=mean2,
-				std2=std2, n2=n2, percentiles=percentiles, relative=relative)
+							 std2=std2, n2=n2, percentiles=percentiles, relative=relative)
 
 
 def normal_difference(mean1, std1, n1, mean2, std2, n2, percentiles=[2.5, 97.5],
-				relative=False):
+					  relative=False):
 	"""
 	Calculates the difference distribution of two normal distributions.
 
@@ -434,12 +438,12 @@ def normal_difference(mean1, std1, n1, mean2, std2, n2, percentiles=[2.5, 97.5],
 	# Mapping percentiles via standard error
 	if relative:
 		return dict([(p, stats.t.ppf(p / 100.0, df=d_free) * st_error)
-						for p in percentiles])
+					 for p in percentiles])
 	else:
 		return dict([(p, mean + stats.t.ppf(p / 100.0, df=d_free) * st_error)
-						for p in percentiles])
+					 for p in percentiles])
 
 
 if __name__ == '__main__':
-    #doctest.testmod()
+	# doctest.testmod()
 	delta(None, None)

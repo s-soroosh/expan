@@ -16,32 +16,35 @@ from expan.core.experimentdata import *
 
 
 def get_data(folder_path):
-    files = [f for f in listdir(folder_path) if isfile(join(folder_path, f))]
+	files = [f for f in listdir(folder_path) if isfile(join(folder_path, f))]
 
-    try:
-        assert ('metrics' in '-'.join(files))
-        assert ('metadata' in '-'.join(files))
+	try:
+		assert ('metrics' in '-'.join(files))
+		assert ('metadata' in '-'.join(files))
 
-        metrics = metadata = None
+		metrics = metadata = None
 
-        for f in files:
+		for f in files:
 
-            if 'metrics' in f:
-                try:
-                    metrics = pd.read_csv(folder_path + '/' + f)
-                except Exception as e:
-                    print e
+			if 'metrics' in f:
+				try:
+					metrics = pd.read_csv(folder_path + '/' + f)
+				except Exception as e:
+					print
+					e
 
-            elif 'metadata' in f:
-                try:
-                    with open(folder_path + '/' + f, 'r') as input_json:
-                        metadata = json.load(input_json)
-                except ValueError as e:
-                    print e
-                    raise
+			elif 'metadata' in f:
+				try:
+					with open(folder_path + '/' + f, 'r') as input_json:
+						metadata = json.load(input_json)
+				except ValueError as e:
+					print
+					e
+					raise
 
-        return ExperimentData(metrics=metrics, metadata=metadata)
+		return ExperimentData(metrics=metrics, metadata=metadata)
 
-    except AssertionError as e:
-        print e
-        raise
+	except AssertionError as e:
+		print
+		e
+		raise

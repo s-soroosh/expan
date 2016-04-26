@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'ExpAn'
-copyright = u'2016, Marko Kolarek'
+copyright = u'2016, Zalando SE'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -209,7 +209,7 @@ latex_elements = {
 latex_documents = [
 	('index', 'expan.tex',
 	 u'ExpAn Documentation',
-	 u'Marko Kolarek', 'manual'),
+	 u'Zalando SE', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at
@@ -240,7 +240,7 @@ latex_documents = [
 man_pages = [
 	('index', 'expan',
 	 u'ExpAn Documentation',
-	 [u'Marko Kolarek'], 1)
+	 [u'Zalando SE'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -255,7 +255,7 @@ man_pages = [
 texinfo_documents = [
 	('index', 'expan',
 	 u'ExpAn Documentation',
-	 u'Marko Kolarek',
+	 u'Zalando SE',
 	 'expan',
 	 'One line description of project.',
 	 'Miscellaneous'),

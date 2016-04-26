@@ -11,8 +11,12 @@ used by both data scientists optimizing a user interface and biologists
 running wet-lab experiments. The library is also standalone and can be
 imported and used from within other projects and from the command line.
 
-Major statistical functionalities include: - **feature check** -
-**delta** - **subgroup analysis** - **trend**
+Major statistical functionalities include:
+
+- **feature check**
+- **delta**
+- **subgroup analysis**
+- **trend**
 
 Table of Contents
 =================
@@ -65,9 +69,9 @@ Style guide
 -----------
 
 We follow `PEP8 standards <https://www.python.org/dev/peps/pep-0008>`__
-with the following exceptions: - Use *tabs instead of spaces* - this
-allows all individuals to have visual depth of indentation they prefer,
-without changing the source code at all, and it is simply smaller
+with the following exceptions: 
+
+- Use *tabs instead of spaces* - this allows all individuals to have visual depth of indentation they prefer, without changing the source code at all, and it is simply smaller
 
 Branching / Release
 -------------------

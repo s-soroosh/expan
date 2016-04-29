@@ -62,7 +62,7 @@ Ready to contribute? Here's how to set up `expan` for local development.
 1. Fork the `expan` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/expan.git #TODO: fix this command and see if it works
+    $ git clone git@github.com:zalando/expan.git #TODO: fix this command and see if it works
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 

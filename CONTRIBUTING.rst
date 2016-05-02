@@ -45,7 +45,7 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/zalando/expan/issues. # TODO: wrong
+The best way to send feedback is to file an issue at https://github.com/zalando/expan/issues.
 
 If you are proposing a feature:
 
@@ -62,7 +62,7 @@ Ready to contribute? Here's how to set up `expan` for local development.
 1. Fork the `expan` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:zalando/expan.git #TODO: fix this command and see if it works
+    $ git clone git@github.com:zalando/expan.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
@@ -110,4 +110,4 @@ Tips
 
 To run a subset of tests::
 
-    $ python -m unittest tests.test_expan
+    $ py.test tests/tests_core/test_results.py

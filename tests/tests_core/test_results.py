@@ -22,9 +22,8 @@ def generate_random_results():
 
 def load_example_results():
 	"""
-  This just loads example data that was created with the
-  generate_results_from_retargeting function, so that we need not load
-  the full data from that experiment in order to test.
+  This just loads example data so that we need always generate random stuff
+  in order to test.
 
   Returns Results object.
   """
@@ -32,79 +31,6 @@ def load_example_results():
 	example_fname = 'example_results.h5'
 	example_fpath = os.path.join(data_dir, example_fname)
 	return r.from_hdf(example_fpath)
-
-
-def generate_results_from_retargeting(df):
-	"""
-  Input: ckpis from Retargeting experiment.
-
-  Just experimenting with the data structure.
-  This should give out a format that should be appropriate for:
-   - delta kpi
-   - sga
-   - time profile
-  """
-	metadata = {
-		'experiment': 'Retargeting NL',
-		'load_time': pd.Timestamp.now('UTC'),
-		'source_type': 'file_local',
-		'source': 'exasol',
-		'cached': True
-	}
-	# res = df.reset_index().groupby(['treatment','start_segment'])[[
-	#      'orders','net_sales','pcii']].agg(['mean','sum','var','count'])
-	res = df.reset_index().pivot_table(
-		values=['orders', 'net_sales', 'pcii'],  # just a convenience, subset
-		index=['treatment', 'start_segment'],
-		# columns=['treatment'],
-		aggfunc=[np.mean, sum, np.var])
-
-	res = res.stack('metric')
-
-	res.columns.set_names('statistic', inplace=True)
-
-	res['subgroup_metric'] = 'start_segment'
-	res.index.rename('subgroup', level='start_segment', inplace=True)
-	res.set_index('subgroup_metric', append=True, inplace=True)
-
-	res.index.rename('variant', 'treatment', inplace=True)
-
-	res = res.reorder_levels(
-		['metric', 'subgroup_metric', 'subgroup', 'variant'])
-
-	res = pd.DataFrame(res.stack(level='statistic'), columns=['value'])
-	res['pctile'] = np.nan
-	# res['unit']='€'; res.loc['orders','unit']='orders'
-
-	res = res.unstack(level='variant')
-	res = res.swaplevel(0, 1, axis=1)
-
-	mm = df.groupby(level='treatment')['orders', 'net_sales', 'pcii'].agg(
-		['mean', 'sum', 'var'])
-	mm.index.name = 'variant'
-	mm.columns.names = ['metric', 'statistic']
-	mm = mm.T
-
-	nn = pd.DataFrame(mm.stack(), columns=['value'])
-	nn = nn.unstack('variant')
-	nn = nn.swaplevel(0, 1, 1)
-	hh = nn.stack('variant')
-
-	hh['subgroup_metric'] = '-'
-	hh['subgroup'] = np.nan
-	hh['pctile'] = np.nan
-
-	jj = hh.reset_index().set_index(
-		['metric', 'subgroup_metric', 'subgroup', 'statistic', 'pctile', 'variant']
-	).unstack('variant').swaplevel(0, 1, 1)
-
-	final = pd.concat([res, jj])
-
-	final.sortlevel(axis=0, inplace=True, sort_remaining=True)
-	final.sortlevel(axis=1, inplace=True, sort_remaining=True)
-
-	return r.Results(final, metadata)
-
 
 class ResultsTestCase(unittest.TestCase):
 	"""

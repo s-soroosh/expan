@@ -31,7 +31,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name='expan',
-	version='0.1.3',
+	version='0.1.4',
 	description="Experiment Analysis Library",
 	long_description=readme + '\n\n' + history,
 	author="Zalando SE",

@@ -17,9 +17,9 @@ data_dir = os.getcwd() + '/tests/tests_core/'  # TODO: adjust this depending on 
 # TODO: include this functions in some more general module
 def get_norm_temp_data(fname='normtemp.dat.txt.gz'):
 	"""
-  Data retrieved on 2015/02/18 from:
+  	Data retrieved on 2015/02/18 from:
       http://www.amstat.org/publications/jse/jse_data_archive.htm
-  """
+  	"""
 
 	# Read data from csv to pd.dataFrame
 	data = pd.read_csv(
@@ -39,7 +39,7 @@ def get_framingham_data(fname='framingham_heart_study_exam7.csv'):
 	"""
       Data retrieved on 2015/10/28 from:
           http://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/BS704_Confidence_Intervals/BS704_Confidence_Intervals5.html
-  """
+  	"""
 
 	# Read data from csv to pd.dataFrame
 	data = pd.read_csv(os.path.join(data_dir, fname),
@@ -54,14 +54,14 @@ def get_framingham_data(fname='framingham_heart_study_exam7.csv'):
 
 class StatisticsTestCase(unittest.TestCase):
 	"""
-  Defines the setUp() and tearDown() functions for the statistics test cases.
-  """
+  	Defines the setUp() and tearDown() functions for the statistics test cases.
+  	"""
 
 	def setUp(self):
 		"""
-    Load the needed datasets for all StatisticsTestCases and set the random
-    seed so that randomized algorithms show deterministic behaviour.
-    """
+    	Load the needed datasets for all StatisticsTestCases and set the random
+    	seed so that randomized algorithms show deterministic behaviour.
+    	"""
 		np.random.seed(0)
 		self.samples = get_norm_temp_data()
 		self.metrics = get_framingham_data()
@@ -71,21 +71,21 @@ class StatisticsTestCase(unittest.TestCase):
 
 	def tearDown(self):
 		"""
-    Clean up after the test
-    """
+    	Clean up after the test
+    	"""
 		# TODO: find out if we have to remove data manually
 		pass
 
 
 class DeltaTestCases(StatisticsTestCase):
 	"""
-  Test cases for the delta() function in core.statistics.
-  """
+  	Test cases for the delta() function in core.statistics.
+  	"""
 
 	def test__delta__not_providing_data_fails(self):
 		"""
-    Value error raised when not providing data.
-    """
+    	Value error raised when not providing data.
+    	"""
 		# Check if error is raised for None data
 		with self.assertRaises(ValueError):
 			statx.delta(self.samples.temperature, None)
@@ -95,8 +95,8 @@ class DeltaTestCases(StatisticsTestCase):
 
 	def test__delta__computation_assumed_normal(self):
 		"""
-    Result of delta() assuming normality equals expected result.
-    """
+    	Result of delta() assuming normality equals expected result.
+    	"""
 		# Computing delta assumed normal
 		result1 = statx.delta(
 			self.samples.temperature[self.samples.gender == 1],
@@ -116,8 +116,8 @@ class DeltaTestCases(StatisticsTestCase):
 
 	def test__delta__nan_handling(self):
 		"""
-    Test correct handling of nans. (ignored)
-    """
+    	Test correct handling of nans. (ignored)
+    	"""
 		result1 = statx.delta(self.rand_s1, self.rand_s2)
 		self.assertEqual(result1[2], 1000)
 		self.assertEqual(result1[3], 1000)
@@ -132,8 +132,8 @@ class DeltaTestCases(StatisticsTestCase):
 
 	def test__delta__computation_not_assumed_normal(self):
 		"""
-    Result of delta() not assuming normality equals expected result.
-    """
+    	Result of delta() not assuming normality equals expected result.
+    	"""
 		# Computing delta not assumed normal
 		result1 = statx.delta(
 			self.samples.temperature[self.samples.gender == 1],
@@ -154,13 +154,13 @@ class DeltaTestCases(StatisticsTestCase):
 
 class ChiSquareTestCases(StatisticsTestCase):
 	"""
-  Test cases for the chi_square() function in core.statistics.
-  """
+  	Test cases for the chi_square() function in core.statistics.
+  	"""
 
 	def test__chi_square__not_providing_data_fails(self):
 		"""
-    Value error raised when not providing data.
-    """
+    	Value error raised when not providing data.
+    	"""
 		# Check if error is raised for None data
 		with self.assertRaises(ValueError):
 			statx.chi_square(self.samples.temperature, None)
@@ -170,8 +170,8 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_same_data(self):
 		"""
-    Check if p-value is 1.0 for same data entered twice.
-    """
+    	Check if p-value is 1.0 for same data entered twice.
+    	"""
 		# Computation of chi-square p-value
 		self.assertEqual(1.0,
 						 statx.chi_square(self.samples.temperature,
@@ -179,8 +179,8 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_different_data(self):
 		"""
-    Check if p-value is correct for test data from pandas manual page.
-    """
+    	Check if p-value is correct for test data from pandas manual page.
+    	"""
 		# Create test data:
 		a = ['A'] * 16 + ['B'] * 18 + ['C'] * 16 + ['D'] * 14 + ['E'] * 12 + ['F'] * 12
 		b = ['A'] * 16 + ['B'] * 16 + ['C'] * 16 + ['D'] * 16 + ['E'] * 16 + ['F'] * 8
@@ -189,9 +189,9 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_different_data_as_in_statistics_book(self):
 		"""
-    Check if p-value is correct for test data from statistics book
-    Fahrmeir et al. (2007) pp. 463.
-    """
+    	Check if p-value is correct for test data from statistics book
+    	Fahrmeir et al. (2007) pp. 463.
+    	"""
 		# Create test data:
 		a = ['nein'] * 139 + ['gut'] * 348 + ['mittel'] * 213
 		b = ['nein'] * 135 + ['gut'] * 46 + ['mittel'] * 119
@@ -202,10 +202,10 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_different_data_as_in_open_statistics_book(self):
 		"""
-    Check if p-value is correct for test data from
-    open statistics book 3rd ed pp. 299.
-    (https://www.openintro.org/stat/textbook.php)
-    """
+    	Check if p-value is correct for test data from
+    	open statistics book 3rd ed pp. 299.
+    	(https://www.openintro.org/stat/textbook.php)
+    	"""
 		# Create test data:
 		a = ['cu'] * 3511 + ['t1'] * 1749 + ['t2'] * 1818
 		b = ['cu'] * 1489 + ['t1'] * 751 + ['t2'] * 682
@@ -216,8 +216,8 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_one_bin_not_present(self):
 		"""
-    Check if p-value is correct for test data from pandas manual page.
-    """
+    	Check if p-value is correct for test data from pandas manual page.
+    	"""
 		# Create test data:
 		a = ['A'] * 16 + ['B'] * 18 + ['C'] * 16 + ['D'] * 14 + ['E'] * 12 + ['F'] * 12
 		b = ['A'] * 16 + ['B'] * 16 + ['C'] * 16 + ['D'] * 16 + ['E'] * 16 + ['F'] * 8
@@ -228,8 +228,8 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 	def test__chi_square__computation_symmetric(self):
 		"""
-    Check if p-value is roughly symmetric.
-    """
+    	Check if p-value is roughly symmetric.
+    	"""
 		# Create test data:
 		a = ['A'] * 16 + ['B'] * 18 + ['C'] * 16 + ['D'] * 14 + ['E'] * 12 + ['F'] * 12
 		b = ['A'] * 16 + ['B'] * 16 + ['C'] * 16 + ['D'] * 16 + ['E'] * 16 + ['F'] * 8
@@ -244,65 +244,65 @@ class ChiSquareTestCases(StatisticsTestCase):
 
 class SampleSizeTestCases(StatisticsTestCase):
 	"""
-  Test cases for the sample_size() function in core.statistics.
-  """
+  	Test cases for the sample_size() function in core.statistics.
+  	"""
 
-	def test__sample_size__list_numeric(self):
+	def test__sample_size__empty_list_numeric(self):
 		"""
-    Empty list returns 0.
+    	Empty list returns 0.
 
-    """
+    	"""
 		self.assertEqual(statx.sample_size([]), 0)
 
 	def test__sample_size__list_numeric(self):
 		"""
-    Result of sample_size() is number of elements of a list.
-    """
+    	Result of sample_size() is number of elements of a list.
+    	"""
 		x = [1, 1, 2, 5, 8]
 		self.assertEqual(statx.sample_size(x), 5)
 
 	def test__sample_size__nparray_numeric_with_nan(self):
 		"""
-    Result of sample_size() is number of elements of numpy array minus
-    number of NaNs.
-    """
+    	Result of sample_size() is number of elements of numpy array minus
+    	number of NaNs.
+    	"""
 		x = np.array([1, 1, np.nan, 2, np.nan, 5, 8])
 		self.assertEqual(statx.sample_size(x), 5)
 
 	def test__sample_size__list_categorical(self):
 		"""
-    Result of sample_size() is number of elements of a list of categorical
-    data.
-    """
+    	Result of sample_size() is number of elements of a list of categorical
+    	data.
+    	"""
 		x = ['1', '1', '3', '2', '6', '5', '8']
 		self.assertEqual(statx.sample_size(x), 7)
 
 	def test__sample_size__pdseries_categorical(self):
 		"""
-    Result of sample_size() is number of elements of a pandas series with
-    categorical data.
-    """
+    	Result of sample_size() is number of elements of a pandas series with
+    	categorical data.
+    	"""
 		x = pd.Series(['1', '7', '2', '5', '8', '0'])
 		self.assertEqual(statx.sample_size(x), 6)
 
 	def test__sample_size__pdseries_categorical_with_na(self):
 		"""
-    Result of sample_size() is number of elements of a pandas series with
-    categorical data including NAs.
-    """
+    	Result of sample_size() is number of elements of a pandas series with
+    	categorical data including NAs.
+    	"""
 		x = ['1', '1', 'NA', '2', 'NA', '5', '8']
 		self.assertEqual(statx.sample_size(x), 5)
 
 
 class AlphaToPercentilesTestCases(StatisticsTestCase):
 	"""
-  Test cases for the alpha_to_percentiles() function in core.statistics.
-  """
+  	Test cases for the alpha_to_percentiles() function in core.statistics.
+  	"""
 
 	def test__alpha_to_percentiles__computation(self):
 		"""
-    Result of alpha_to_percentiles() equals expected result.
-    """
+    	Result of alpha_to_percentiles() equals expected result.
+    	"""
 		# Computing alpha_to_percentiles
 		result = statx.alpha_to_percentiles(0.05)
 		# Checking if first percentile is correct
@@ -313,14 +313,14 @@ class AlphaToPercentilesTestCases(StatisticsTestCase):
 
 class BootstrapTestCases(StatisticsTestCase):
 	"""
-  Test cases for the bootstrap() function in core.statistics.
-  """
+  	Test cases for the bootstrap() function in core.statistics.
+  	"""
 
 	def setUp(self):
 		"""
-    Do the same setup as before - separate so that changing things in the base
-    TestCase doesn't change the randomisation here.
-    """
+    	Do the same setup as before - separate so that changing things in the base
+    	TestCase doesn't change the randomisation here.
+    	"""
 
 		np.random.seed(0)
 		self.samples = get_norm_temp_data()
@@ -328,8 +328,8 @@ class BootstrapTestCases(StatisticsTestCase):
 
 	def test__bootstrap__computation(self):
 		"""
-    Result of bootstrap() equals expected result.
-    """
+    	Result of bootstrap() equals expected result.
+    	"""
 		# Computing bootstrap
 		result1 = statx.bootstrap(self.samples.temperature, [0],
 								  min_observations=1)
@@ -365,13 +365,13 @@ class BootstrapTestCases(StatisticsTestCase):
 
 class PooledStdTestCases(StatisticsTestCase):
 	"""
-  Test cases for the pooled_std() function in core.statistics.
-  """
+  	Test cases for the pooled_std() function in core.statistics.
+  	"""
 
 	def test__pooled_std__variances_differ_too_much_error(self):
 		"""
-    Warning raised when variances differ too much.
-    """
+    	Warning raised when variances differ too much.
+    	"""
 		with warnings.catch_warnings(record=True) as w:
 			warnings.simplefilter('always')
 
@@ -383,8 +383,8 @@ class PooledStdTestCases(StatisticsTestCase):
 
 	def test__pooled_std__computation(self):
 		"""
-    Result of pooled_std() equals expected result.
-    """
+    	Result of pooled_std() equals expected result.
+    	"""
 		# Define subset of data for test
 		sbp = self.metrics.loc['systolic_bp', :]
 		# Computation of pooled standard deviation
@@ -401,16 +401,16 @@ class PooledStdTestCases(StatisticsTestCase):
 
 class NormalSamplePercentilesTestCases(StatisticsTestCase):
 	"""
-  Test cases for the normal_sample_percentiles() function in core.statistics.
-  """
+  	Test cases for the normal_sample_percentiles() function in core.statistics.
+  	"""
 
 	def test__normal_sample_percentiles__computation(self):
 		"""
-    Result of normal_sample_percentiles() equals expected result.
+    	Result of normal_sample_percentiles() equals expected result.
 
-    Example from:
+    	Example from:
         http://www.stat.yale.edu/Courses/1997-98/101/confint.htm
-    """
+    	"""
 		# Define data for testing
 		val = np.array([102.5, 101.7, 103.1, 100.9, 100.5, 102.2])
 		# Computation with relative set True
@@ -430,13 +430,13 @@ class NormalSamplePercentilesTestCases(StatisticsTestCase):
 
 class NormalDifferenceTestCases(StatisticsTestCase):
 	"""
-  Test cases for the normal_difference() function in core.statistics.
-  """
+  	Test cases for the normal_difference() function in core.statistics.
+  	"""
 
 	def test__normal_difference__computation(self):
 		"""
-    Result of normal_difference() equals expected result.
-    """
+    	Result of normal_difference() equals expected result.
+    	"""
 		# Define subset of data for first test
 		sbp = self.metrics.loc['systolic_bp', :]
 		# computation of normal difference
@@ -469,8 +469,8 @@ class NormalDifferenceTestCases(StatisticsTestCase):
 
 class NormalSampleDifferenceTestCases(StatisticsTestCase):
 	"""
-  Test cases for the normal_sample_difference() function in core.statistics.
-  """
+  	Test cases for the normal_sample_difference() function in core.statistics.
+  	"""
 
 	def test__normal_sample_difference__computation(self):
 		# Defining data and computing normal difference

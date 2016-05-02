@@ -89,7 +89,7 @@ Versioning
 **For the sake of reproducibility, always be sure to work with a release
 when doing the analysis!**
 
-The current version of ExpAn core is: v0.1.0.
+The current version of ExpAn core is: v0.1.1.
 
 This is maintained in ``version.py`` as the string ``__version__`` with
 the form:
@@ -114,7 +114,7 @@ repository.
 
     >>> import core.binning
     >>> core.version()
-    'v0.1.0'
+    'v0.1.1'
     >>> core.version('{major}.{minor}..{commits}')
     '0.0..176'
     >>> core.version('{commit}')

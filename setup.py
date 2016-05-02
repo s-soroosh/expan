@@ -17,7 +17,8 @@ requirements = [
 	"numpy >= 1.10.4",
 	"pandas >= 0.17.1",
 	"simplejson >= 3.8.2",
-	"scipy >= 0.17.0"
+	"scipy >= 0.17.0",
+	"takemeout >= 0.1.1"
 ]
 
 test_requirements = [
@@ -30,7 +31,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name='expan',
-	version='0.0.6',
+	version='0.1.1',
 	description="Experiment Analysis Library",
 	long_description=readme + '\n\n' + history,
 	author="Zalando SE",
